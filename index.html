@@ -8,7 +8,6 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Noto Sans JP',sans-serif;font-size:14px;color:#222;background:#f5f5f0;min-height:100vh;padding:24px 16px}
-h1{font-size:18px;font-weight:500;margin-bottom:20px;color:#222}
 .tabs{display:flex;border-bottom:1.5px solid #bbb;margin-bottom:20px}
 .tab{padding:10px 24px;cursor:pointer;font-size:13px;font-weight:500;color:#888;border-bottom:2px solid transparent;margin-bottom:-1.5px;transition:all .15s;background:none;border-top:none;border-left:none;border-right:none}
 .tab.active{color:#222;border-bottom-color:#222}
@@ -16,38 +15,31 @@ h1{font-size:18px;font-weight:500;margin-bottom:20px;color:#222}
 .denpyo{background:#fff;border:1px solid #4a7ab5;max-width:660px;padding:18px 22px;font-family:'Noto Serif JP',serif}
 .denpyo-title{font-size:22px;font-weight:700;letter-spacing:.2em;margin-bottom:4px;display:flex;align-items:baseline;gap:12px;color:#1a1a1a}
 .denpyo-title span{font-size:13px;font-weight:400;font-family:'Noto Sans JP',sans-serif;letter-spacing:0}
-.no-input{border:none;border-bottom:1px solid #4a7ab5;width:80px;font-size:13px;background:transparent;color:#222;padding:0 2px;text-align:left;outline:none}
+.no-input{border:none;border-bottom:1px solid #4a7ab5;width:80px;font-size:13px;background:transparent;color:#222;padding:0 2px;outline:none}
 .date-row{display:flex;align-items:center;gap:4px;font-size:13px;margin:8px 0 10px;justify-content:flex-end;margin-right:60px}
 .date-inp{border:none;border-bottom:1px solid #4a7ab5;width:36px;background:transparent;color:#222;font-size:13px;text-align:center;outline:none}
 .wide-inp{width:56px}
-.header-row{display:grid;grid-template-columns:56px 1fr 40px 120px 44px;border:1px solid #4a7ab5;background:#e8f0f8}
-.header-row div{padding:4px 6px;font-size:11px;font-weight:700;color:#4a7ab5;border-right:1px solid #4a7ab5;display:flex;align-items:center;justify-content:center;text-align:center}
-.header-row div:last-child{border-right:none}
-.payee-row{display:grid;grid-template-columns:56px 1fr 40px auto 44px;border:1px solid #4a7ab5;border-top:none;min-height:38px}
-.payee-row div{border-right:1px solid #4a7ab5;padding:4px 6px;display:flex;align-items:center}
-.payee-row div:last-child{border-right:none;justify-content:center;font-size:18px;font-weight:700;color:#4a7ab5}
-.code-inp{width:100%;border:none;background:transparent;font-size:13px;color:#222;outline:none;text-align:center}
-.payee-inp{width:100%;border:none;background:transparent;font-size:15px;color:#222;outline:none}
-.shikiri-inp{width:100%;border:none;background:transparent;font-size:11px;text-align:center;color:#222;outline:none}
-.detail-header{display:grid;grid-template-columns:120px 1fr 160px;border:1px solid #4a7ab5;border-top:none;background:#e8f0f8}
-.detail-header div{padding:4px 8px;font-size:11px;font-weight:700;color:#4a7ab5;border-right:1px solid #4a7ab5;text-align:center}
+.payee-section{border:1px solid #4a7ab5;margin-bottom:0}
+.payee-header{display:grid;grid-template-columns:56px 1fr;background:#e8f0f8;border-bottom:1px solid #4a7ab5}
+.payee-header div{padding:4px 8px;font-size:11px;font-weight:700;color:#4a7ab5;border-right:1px solid #4a7ab5;text-align:center}
+.payee-header div:last-child{border-right:none}
+.payee-body{display:grid;grid-template-columns:56px 1fr 44px;min-height:36px}
+.payee-body div{border-right:1px solid #4a7ab5;padding:4px 8px;display:flex;align-items:center}
+.payee-body div:last-child{border-right:none;justify-content:center;font-size:18px;font-weight:700;color:#4a7ab5}
+.code-inp{width:100%;border:none;background:transparent;font-size:13px;color:#222;outline:none;text-align:center;font-family:'Noto Sans JP',sans-serif}
+.payee-inp{width:100%;border:none;background:transparent;font-size:14px;color:#222;outline:none;font-family:'Noto Sans JP',sans-serif}
+.detail-header{display:grid;grid-template-columns:130px 1fr 130px;border:1px solid #4a7ab5;border-top:none;background:#e8f0f8}
+.detail-header div{padding:6px 8px;font-size:11px;font-weight:700;color:#4a7ab5;border-right:1px solid #4a7ab5;text-align:center}
 .detail-header div:last-child{border-right:none}
-.amount-sub{display:grid;grid-template-columns:repeat(7,1fr);height:100%}
-.amount-sub div{border-left:1px solid #4a7ab5;font-size:10px;color:#4a7ab5;text-align:center;padding:2px 0}
-.detail-row{display:grid;grid-template-columns:120px 1fr 160px;border:1px solid #4a7ab5;border-top:none;min-height:30px}
-.detail-row div{border-right:1px solid #4a7ab5;padding:2px 4px;display:flex;align-items:center}
-.detail-row div:last-child{border-right:none}
-.amt-cells{display:grid;grid-template-columns:repeat(7,1fr);width:100%;height:100%}
-.amt-cells input{border:none;border-left:0.5px solid #4a7ab5;background:transparent;font-size:13px;text-align:right;outline:none;color:#222;padding:0 3px;width:100%;height:100%}
-.amt-cells input:first-child{border-left:none}
-.kanji-inp{width:100%;border:none;background:transparent;font-size:12px;color:#222;outline:none}
-.summary-inp{width:100%;border:none;background:transparent;font-size:12px;color:#222;outline:none}
-.total-row{display:grid;grid-template-columns:1fr 160px;border:1px solid #4a7ab5;border-top:none;min-height:36px}
-.total-row div{border-right:1px solid #4a7ab5;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#4a7ab5;letter-spacing:.3em}
-.total-row div:last-child{border-right:none}
-.total-amt{display:grid;grid-template-columns:repeat(7,1fr);width:100%;height:100%}
-.total-amt span{border-left:0.5px solid #4a7ab5;display:flex;align-items:center;justify-content:flex-end;padding-right:3px;font-size:13px;font-weight:700;color:#222}
-.total-amt span:first-child{border-left:none}
+.detail-row{display:grid;grid-template-columns:130px 1fr 130px;border:1px solid #4a7ab5;border-top:none;min-height:32px}
+.detail-row > div{border-right:1px solid #4a7ab5;padding:2px 6px;display:flex;align-items:center}
+.detail-row > div:last-child{border-right:none}
+.kanji-inp{width:100%;border:none;background:transparent;font-size:12px;color:#222;outline:none;font-family:'Noto Sans JP',sans-serif}
+.summary-inp{width:100%;border:none;background:transparent;font-size:12px;color:#222;outline:none;font-family:'Noto Sans JP',sans-serif}
+.amount-inp{width:100%;border:none;background:transparent;font-size:13px;color:#222;outline:none;text-align:right;font-family:'Noto Sans JP',sans-serif;padding-right:4px}
+.total-row{display:grid;grid-template-columns:1fr 130px;border:1px solid #4a7ab5;border-top:none;min-height:36px}
+.total-row > div:first-child{border-right:1px solid #4a7ab5;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#4a7ab5;letter-spacing:.3em}
+.total-row > div:last-child{display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:14px;font-weight:700;color:#222}
 .btn-row{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
 button{padding:8px 20px;border:1px solid #ccc;border-radius:8px;background:#fff;cursor:pointer;font-size:13px;color:#222;transition:background .15s;font-family:'Noto Sans JP',sans-serif}
 button:hover{background:#f0f0f0}
@@ -84,39 +76,26 @@ tr:hover td{background:#f9f9f7}
         <input class="date-inp" id="d-month" maxlength="2" />月
         <input class="date-inp" id="d-day" maxlength="2" />日
       </div>
-      <div class="header-row">
-        <div>コード</div>
-        <div></div>
-        <div>支払<br>先</div>
-        <div style="flex:1;border-right:none"></div>
-        <div>様</div>
-      </div>
-      <div class="payee-row">
-        <div><input class="code-inp" id="code" /></div>
-        <div style="grid-column:span 2;border-right:1px solid #4a7ab5;padding-left:8px">
-          <input class="payee-inp" id="payee" placeholder="支払先名" />
+      <div class="payee-section">
+        <div class="payee-header">
+          <div>コード</div>
+          <div>支払先</div>
         </div>
-        <div style="flex:1;border-right:none"></div>
-        <div>様</div>
+        <div class="payee-body">
+          <div><input class="code-inp" id="code" /></div>
+          <div><input class="payee-inp" id="payee" placeholder="支払先名を入力" /></div>
+          <div>様</div>
+        </div>
       </div>
       <div class="detail-header">
         <div>勘定科目</div>
-        <div>摘&nbsp;&nbsp;&nbsp;&nbsp;要</div>
-        <div>
-          <div style="text-align:center;padding-bottom:2px">金&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;額</div>
-          <div class="amount-sub">
-            <div>千万</div><div>百万</div><div>十万</div><div>万</div><div>千</div><div>百</div><div>十</div>
-          </div>
-        </div>
+        <div>摘　　要</div>
+        <div>金　額</div>
       </div>
       <div id="rows-container"></div>
       <div class="total-row">
-        <div>合&nbsp;&nbsp;&nbsp;&nbsp;計</div>
-        <div>
-          <div class="total-amt" id="total-cells">
-            <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-          </div>
-        </div>
+        <div>合　　計</div>
+        <div id="total-display">¥0</div>
       </div>
     </div>
     <div class="btn-row">
@@ -131,7 +110,7 @@ tr:hover td{background:#f9f9f7}
       <input class="search-inp" id="search-inp" placeholder="支払先・勘定科目で検索..." oninput="renderDB()" />
       <button onclick="exportCSV()">CSV出力</button>
     </div>
-    <table id="db-table">
+    <table>
       <thead>
         <tr>
           <th>No.</th><th>日付</th><th>コード</th><th>支払先</th><th>勘定科目</th><th>摘要</th><th style="text-align:right">金額</th><th></th>
@@ -170,45 +149,20 @@ function addRow(){
   const c=document.getElementById('rows-container');
   const d=document.createElement('div');
   d.className='detail-row';
-  d.innerHTML=`<div><input class="kanji-inp" placeholder="例：消耗品費"></div><div><input class="summary-inp" placeholder="摘要"></div><div><div class="amt-cells">${Array(7).fill(0).map((_,i)=>`<input maxlength="1" oninput="onDigit(this,${i})" onkeydown="onKey(event,this,${i})">`).join('')}</div></div>`;
+  d.innerHTML=`
+    <div><input class="kanji-inp" placeholder="例：消耗品費"></div>
+    <div><input class="summary-inp" placeholder="摘要"></div>
+    <div><input class="amount-inp" type="number" min="0" placeholder="0" oninput="calcTotal()"></div>
+  `;
   c.appendChild(d);
   calcTotal();
 }
 
-function onDigit(el,idx){
-  el.value=el.value.replace(/[^0-9]/g,'');
-  calcTotal();
-  if(el.value&&idx<6){
-    const cells=el.closest('.amt-cells').querySelectorAll('input');
-    cells[idx+1].focus();
-  }
-}
-
-function onKey(e,el,idx){
-  if(e.key==='Backspace'&&!el.value&&idx>0){
-    const cells=el.closest('.amt-cells').querySelectorAll('input');
-    cells[idx-1].focus();
-  }
-}
-
-function getRowAmount(row){
-  const inputs=row.querySelectorAll('.amt-cells input');
-  let s='';
-  inputs.forEach(i=>s+=i.value||'0');
-  return parseInt(s)||0;
-}
-
-function setTotalCells(total){
-  const s=String(total).padStart(7,'0');
-  const spans=document.querySelectorAll('#total-cells span');
-  spans.forEach((sp,i)=>sp.textContent=s[i]==='0'?'':s[i]);
-}
-
 function calcTotal(){
-  const rows=document.querySelectorAll('.detail-row');
+  const inputs=document.querySelectorAll('.amount-inp');
   let t=0;
-  rows.forEach(r=>t+=getRowAmount(r));
-  setTotalCells(t);
+  inputs.forEach(i=>t+=parseInt(i.value)||0);
+  document.getElementById('total-display').textContent='¥'+t.toLocaleString();
 }
 
 function switchTab(tab){
@@ -224,7 +178,7 @@ function saveDenpyo(){
   rows.forEach(r=>{
     const k=r.querySelector('.kanji-inp').value;
     const s=r.querySelector('.summary-inp').value;
-    const a=getRowAmount(r);
+    const a=parseInt(r.querySelector('.amount-inp').value)||0;
     if(k||s||a) entries.push({kanji:k,summary:s,amount:a});
   });
   if(!entries.length){showToast('明細を入力してください');return;}
