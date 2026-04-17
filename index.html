@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>出金伝票</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans JP',sans-serif;font-size:14px;color:#222;background:#f5f5f0;min-height:100vh;padding:24px 16px}
+h1{font-size:18px;font-weight:500;margin-bottom:20px;color:#222}
+.tabs{display:flex;border-bottom:1.5px solid #bbb;margin-bottom:20px}
+.tab{padding:10px 24px;cursor:pointer;font-size:13px;font-weight:500;color:#888;border-bottom:2px solid transparent;margin-bottom:-1.5px;transition:all .15s;background:none;border-top:none;border-left:none;border-right:none}
+.tab.active{color:#222;border-bottom-color:#222}
+.pane{display:none}.pane.active{display:block}
+.denpyo{background:#fff;border:1px solid #4a7ab5;max-width:660px;padding:18px 22px;font-family:'Noto Serif JP',serif}
+.denpyo-title{font-size:22px;font-weight:700;letter-spacing:.2em;margin-bottom:4px;display:flex;align-items:baseline;gap:12px;color:#1a1a1a}
+.denpyo-title span{font-size:13px;font-weight:400;font-family:'Noto Sans JP',sans-serif;letter-spacing:0}
+.no-input{border:none;border-bottom:1px solid #4a7ab5;width:80px;font-size:13px;background:transparent;color:#222;padding:0 2px;text-align:left;outline:none}
+.date-row{display:flex;align-items:center;gap:4px;font-size:13px;margin:8px 0 10px;justify-content:flex-end;margin-right:60px}
+.date-inp{border:none;border-bottom:1px solid #4a7ab5;width:36px;background:transparent;color:#222;font-size:13px;text-align:center;outline:none}
+.wide-inp{width:56px}
+.header-row{display:grid;grid-template-columns:56px 1fr 40px 120px 44px;border:1px solid #4a7ab5;background:#e8f0f8}
+.header-row div{padding:4px 6px;font-size:11px;font-weight:700;color:#4a7ab5;border-right:1px solid #4a7ab5;display:flex;align-items:center;justify-content:center;text-align:center}
+.header-row div:last-child{border-right:none}
+.payee-row{display:grid;grid-template-columns:56px 1fr 40px auto 44px;border:1px solid #4a7ab5;border-top:none;min-height:38px}
+.payee-row div{border-right:1px solid #4a7ab5;padding:4px 6px;display:flex;align-items:center}
+.payee-row div:last-child{border-right:none;justify-content:center;font-size:18px;font-weight:700;color:#4a7ab5}
+.code-inp{width:100%;border:none;background:transparent;font-size:13px;color:#222;outline:none;text-align:center}
+.payee-inp{width:100%;border:none;background:transparent;font-size:15px;color:#222;outline:none}
+.shikiri-inp{width:100%;border:none;background:transparent;font-size:11px;text-align:center;color:#222;outline:none}
+.detail-header{display:grid;grid-template-columns:120px 1fr 160px;border:1px solid #4a7ab5;border-top:none;background:#e8f0f8}
+.detail-header div{padding:4px 8px;font-size:11px;font-weight:700;color:#4a7ab5;border-right:1px solid #4a7ab5;text-align:center}
+.detail-header div:last-child{border-right:none}
+.amount-sub{display:grid;grid-template-columns:repeat(7,1fr);height:100%}
+.amount-sub div{border-left:1px solid #4a7ab5;font-size:10px;color:#4a7ab5;text-align:center;padding:2px 0}
+.detail-row{display:grid;grid-template-columns:120px 1fr 160px;border:1px solid #4a7ab5;border-top:none;min-height:30px}
+.detail-row div{border-right:1px solid #4a7ab5;padding:2px 4px;display:flex;align-items:center}
+.detail-row div:last-child{border-right:none}
+.amt-cells{display:grid;grid-template-columns:repeat(7,1fr);width:100%;height:100%}
+.amt-cells input{border:none;border-left:0.5px solid #4a7ab5;background:transparent;font-size:13px;text-align:right;outline:none;color:#222;padding:0 3px;width:100%;height:100%}
+.amt-cells input:first-child{border-left:none}
+.kanji-inp{width:100%;border:none;background:transparent;font-size:12px;color:#222;outline:none}
+.summary-inp{width:100%;border:none;background:transparent;font-size:12px;color:#222;outline:none}
+.total-row{display:grid;grid-template-columns:1fr 160px;border:1px solid #4a7ab5;border-top:none;min-height:36px}
+.total-row div{border-right:1px solid #4a7ab5;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#4a7ab5;letter-spacing:.3em}
+.total-row div:last-child{border-right:none}
+.total-amt{display:grid;grid-template-columns:repeat(7,1fr);width:100%;height:100%}
+.total-amt span{border-left:0.5px solid #4a7ab5;display:flex;align-items:center;justify-content:flex-end;padding-right:3px;font-size:13px;font-weight:700;color:#222}
+.total-amt span:first-child{border-left:none}
+.btn-row{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+button{padding:8px 20px;border:1px solid #ccc;border-radius:8px;background:#fff;cursor:pointer;font-size:13px;color:#222;transition:background .15s;font-family:'Noto Sans JP',sans-serif}
+button:hover{background:#f0f0f0}
+button.primary{background:#222;color:#fff;border-color:#222}
+button.primary:hover{background:#444}
+.db-toolbar{display:flex;gap:8px;margin-bottom:14px;align-items:center}
+.search-inp{flex:1;padding:7px 12px;border:1px solid #ccc;border-radius:8px;background:#fff;font-size:13px;color:#222;outline:none;font-family:'Noto Sans JP',sans-serif}
+table{width:100%;border-collapse:collapse;font-size:12px;background:#fff}
+th{background:#f0f0ec;padding:8px 10px;text-align:left;border-bottom:1px solid #ddd;font-weight:500;color:#666;white-space:nowrap}
+td{padding:7px 10px;border-bottom:1px solid #eee;vertical-align:middle;color:#222}
+tr:hover td{background:#f9f9f7}
+.del-btn{border:none;background:none;cursor:pointer;color:#aaa;font-size:14px;padding:2px 6px}
+.del-btn:hover{color:#e24b4a}
+.empty{text-align:center;padding:32px;color:#aaa;font-size:13px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 24px;border-radius:12px;font-size:13px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;white-space:nowrap}
+.container{max-width:740px;margin:0 auto}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('form')">📄 出金伝票</button>
+    <button class="tab" onclick="switchTab('db')">🗃 データベース</button>
+  </div>
+
+  <div id="pane-form" class="pane active">
+    <div class="denpyo">
+      <div class="denpyo-title">
+        出&nbsp;金&nbsp;伝&nbsp;票
+        <span>No.&nbsp;<input class="no-input" id="denpyo-no" /></span>
+      </div>
+      <div class="date-row">
+        <input class="date-inp wide-inp" id="d-year" maxlength="4" />年
+        <input class="date-inp" id="d-month" maxlength="2" />月
+        <input class="date-inp" id="d-day" maxlength="2" />日
+      </div>
+      <div class="header-row">
+        <div>コード</div>
+        <div></div>
+        <div>支払<br>先</div>
+        <div style="flex:1;border-right:none"></div>
+        <div>様</div>
+      </div>
+      <div class="payee-row">
+        <div><input class="code-inp" id="code" /></div>
+        <div style="grid-column:span 2;border-right:1px solid #4a7ab5;padding-left:8px">
+          <input class="payee-inp" id="payee" placeholder="支払先名" />
+        </div>
+        <div style="flex:1;border-right:none"></div>
+        <div>様</div>
+      </div>
+      <div class="detail-header">
+        <div>勘定科目</div>
+        <div>摘&nbsp;&nbsp;&nbsp;&nbsp;要</div>
+        <div>
+          <div style="text-align:center;padding-bottom:2px">金&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;額</div>
+          <div class="amount-sub">
+            <div>千万</div><div>百万</div><div>十万</div><div>万</div><div>千</div><div>百</div><div>十</div>
+          </div>
+        </div>
+      </div>
+      <div id="rows-container"></div>
+      <div class="total-row">
+        <div>合&nbsp;&nbsp;&nbsp;&nbsp;計</div>
+        <div>
+          <div class="total-amt" id="total-cells">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button onclick="addRow()">＋ 行を追加</button>
+      <button class="primary" onclick="saveDenpyo()">💾 DBに保存</button>
+      <button onclick="clearForm()">クリア</button>
+    </div>
+  </div>
+
+  <div id="pane-db" class="pane">
+    <div class="db-toolbar">
+      <input class="search-inp" id="search-inp" placeholder="支払先・勘定科目で検索..." oninput="renderDB()" />
+      <button onclick="exportCSV()">CSV出力</button>
+    </div>
+    <table id="db-table">
+      <thead>
+        <tr>
+          <th>No.</th><th>日付</th><th>コード</th><th>支払先</th><th>勘定科目</th><th>摘要</th><th style="text-align:right">金額</th><th></th>
+        </tr>
+      </thead>
+      <tbody id="db-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let db = JSON.parse(localStorage.getItem('shukkin_db')||'[]');
+let nextNo = parseInt(localStorage.getItem('shukkin_no')||'1');
+
+function today(){
+  const d=new Date();
+  return{y:d.getFullYear(),m:String(d.getMonth()+1).padStart(2,'0'),day:String(d.getDate()).padStart(2,'0')};
+}
+
+function initForm(){
+  const t=today();
+  document.getElementById('d-year').value=t.y;
+  document.getElementById('d-month').value=t.m;
+  document.getElementById('d-day').value=t.day;
+  document.getElementById('denpyo-no').value=String(nextNo).padStart(4,'0');
+  document.getElementById('rows-container').innerHTML='';
+  document.getElementById('code').value='';
+  document.getElementById('payee').value='';
+  for(let i=0;i<5;i++) addRow();
+  calcTotal();
+}
+
+function addRow(){
+  const c=document.getElementById('rows-container');
+  const d=document.createElement('div');
+  d.className='detail-row';
+  d.innerHTML=`<div><input class="kanji-inp" placeholder="例：消耗品費"></div><div><input class="summary-inp" placeholder="摘要"></div><div><div class="amt-cells">${Array(7).fill(0).map((_,i)=>`<input maxlength="1" oninput="onDigit(this,${i})" onkeydown="onKey(event,this,${i})">`).join('')}</div></div>`;
+  c.appendChild(d);
+  calcTotal();
+}
+
+function onDigit(el,idx){
+  el.value=el.value.replace(/[^0-9]/g,'');
+  calcTotal();
+  if(el.value&&idx<6){
+    const cells=el.closest('.amt-cells').querySelectorAll('input');
+    cells[idx+1].focus();
+  }
+}
+
+function onKey(e,el,idx){
+  if(e.key==='Backspace'&&!el.value&&idx>0){
+    const cells=el.closest('.amt-cells').querySelectorAll('input');
+    cells[idx-1].focus();
+  }
+}
+
+function getRowAmount(row){
+  const inputs=row.querySelectorAll('.amt-cells input');
+  let s='';
+  inputs.forEach(i=>s+=i.value||'0');
+  return parseInt(s)||0;
+}
+
+function setTotalCells(total){
+  const s=String(total).padStart(7,'0');
+  const spans=document.querySelectorAll('#total-cells span');
+  spans.forEach((sp,i)=>sp.textContent=s[i]==='0'?'':s[i]);
+}
+
+function calcTotal(){
+  const rows=document.querySelectorAll('.detail-row');
+  let t=0;
+  rows.forEach(r=>t+=getRowAmount(r));
+  setTotalCells(t);
+}
+
+function switchTab(tab){
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['form','db'][i]===tab));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
+  document.getElementById('pane-'+tab).classList.add('active');
+  if(tab==='db') renderDB();
+}
+
+function saveDenpyo(){
+  const rows=document.querySelectorAll('.detail-row');
+  const entries=[];
+  rows.forEach(r=>{
+    const k=r.querySelector('.kanji-inp').value;
+    const s=r.querySelector('.summary-inp').value;
+    const a=getRowAmount(r);
+    if(k||s||a) entries.push({kanji:k,summary:s,amount:a});
+  });
+  if(!entries.length){showToast('明細を入力してください');return;}
+  const no=document.getElementById('denpyo-no').value;
+  const y=document.getElementById('d-year').value;
+  const m=document.getElementById('d-month').value;
+  const day=document.getElementById('d-day').value;
+  const code=document.getElementById('code').value;
+  const payee=document.getElementById('payee').value;
+  const record={id:Date.now(),no,date:`${y}/${m}/${day}`,code,payee,entries,total:entries.reduce((s,e)=>s+e.amount,0)};
+  db.push(record);
+  nextNo++;
+  localStorage.setItem('shukkin_db',JSON.stringify(db));
+  localStorage.setItem('shukkin_no',String(nextNo));
+  showToast('✓ 保存しました');
+  setTimeout(()=>initForm(),600);
+}
+
+function clearForm(){initForm();}
+
+function renderDB(){
+  const q=(document.getElementById('search-inp').value||'').toLowerCase();
+  const filtered=db.filter(r=>{
+    if(!q) return true;
+    return (r.payee||'').toLowerCase().includes(q)||(r.entries||[]).some(e=>(e.kanji||'').includes(q)||(e.summary||'').includes(q));
+  });
+  const tbody=document.getElementById('db-body');
+  if(!filtered.length){tbody.innerHTML=`<tr><td colspan="8" class="empty">データがありません</td></tr>`;return;}
+  tbody.innerHTML=filtered.slice().reverse().map(r=>`
+    <tr>
+      <td>${r.no}</td>
+      <td style="white-space:nowrap">${r.date}</td>
+      <td>${r.code||'—'}</td>
+      <td><strong>${r.payee||'—'}</strong></td>
+      <td>${(r.entries||[]).map(e=>e.kanji).filter(Boolean).join('、')||'—'}</td>
+      <td style="color:#888;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${(r.entries||[]).map(e=>e.summary).filter(Boolean).join(' / ')||'—'}</td>
+      <td style="text-align:right;font-weight:500">¥${r.total.toLocaleString()}</td>
+      <td><button class="del-btn" onclick="deleteRecord(${r.id})">✕</button></td>
+    </tr>
+  `).join('');
+}
+
+function deleteRecord(id){
+  if(!confirm('この記録を削除しますか？')) return;
+  db=db.filter(r=>r.id!==id);
+  localStorage.setItem('shukkin_db',JSON.stringify(db));
+  renderDB();
+}
+
+function exportCSV(){
+  if(!db.length){showToast('データがありません');return;}
+  let csv='No.,日付,コード,支払先,勘定科目,摘要,金額\n';
+  db.forEach(r=>(r.entries||[]).forEach(e=>{
+    csv+=`${r.no},${r.date},${r.code||''},${r.payee||''},${e.kanji||''},${e.summary||''},${e.amount}\n`;
+  }));
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='出金伝票.csv';
+  a.click();
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.style.opacity='1';
+  setTimeout(()=>t.style.opacity='0',2000);
+}
+
+initForm();
+</script>
+</body>
+</html>
